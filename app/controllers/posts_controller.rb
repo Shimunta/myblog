@@ -4,7 +4,7 @@ class PostsController < ApplicationController
   end
 
   def new
-    @post = find_id
+    @post = Post.new
   end
 
   def create
@@ -19,7 +19,29 @@ class PostsController < ApplicationController
     end
   end
   def show
-    @post = Post.find(params[:id])
+    @post = find_id
+  end
+
+  def edit
+    @post = find_id
+  end
+
+  def update
+    @post = find_id
+    @post.assign_attributes(post_params)
+
+    if @post.save
+      redirect_to @post
+    else
+      render :edit
+    end
+  end
+
+  def destroy
+    @post = find_id
+    @post.destroy
+
+    redirect_to root_path
   end
 
   private
@@ -27,6 +49,6 @@ class PostsController < ApplicationController
     params.require(:post).permit(:title, :body)
   end
   def find_id
-    Post.new(params[:id])
+    Post.find(params[:id])
   end
 end
